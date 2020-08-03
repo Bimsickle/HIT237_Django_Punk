@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>{{song.song_title}}</title>
+{% endblock title %}
+
+{% block heading %}
+  <div class="container-fluid">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">{{song.song_title}}</h1>
+        <h3 class="display-7"><a href="{% url 'album_view' song.album.id %}" style = "color: inherit">{{song.album.album_name}}</a></h3>
+        <p class="card-text"><small class="text-muted">
+          {{song.album.band}} | Released. {{song.album.release_date}}</small></p>
+      </div>
+    </div>
+  </div>
+{% endblock heading %}
+
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-4">
+
+        <div class="row">
+          <div class="col-sm">
+            <form action="{% url 'song_delete' song.id %}">
+              <button class="btn btn-danger" type="submit" >Delete Song</button>
+            </form>
+          </div>
+          <div class="col-sm">
+            <form action="{% url 'album_view' song.album.id %}">
+              <button class="btn btn-dark" type="submit" >Return to Album</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <hr>
+        </div>
+
+        <div class="row" style = "margin-left:10px;">
+          <h3>Edit Song</h3>
+          <form action="{% url 'song_edit' song.id%}" method="post">
+            {% csrf_token%}
+            <table>
+              {{ song_form.as_table}}
+            </table>
+            <input type="submit" value="Save Edits">
+          </form>
+        </div>
+
+      </div>
+
+        <div class="col">
+          <h3 class="display-7">All Songs on '{{song.album.album_name}}'</h3>
+            <ul>
+              {% for song in song.album.song_set.all %}
+                <li>{{song.song_title}}</li>
+              {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col">
+          <h3 class="display-7">Musicians on the Album</h3>
+          {% for artist in song.album.musician.all %}
+            <strong><a href="{% url 'artist_detail' artist.id %}" style = "color: inherit">{{artist}}</a></strong><br>
+            <ul>
+              {% for skills in artist.instrument.all %}
+                <li>{{skills}}</li>
+              {% endfor %}
+            </ul>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+
+{% endblock body %}

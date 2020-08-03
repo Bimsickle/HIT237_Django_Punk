@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>{{album.album_name}}</title>
+{% endblock title %}
+
+{% block heading %}
+  <div class="container-fluid">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">{{album.album_name}}</h1>
+        <p class="card-text"><small class="text-muted">
+          <a href="{% url 'band_detail' album.band.id  %}" style = "color: inherit">{{album.band.band_name}}</a> | Released. {{album.release_date}}</small></p>
+      </div>
+    </div>
+  </div>
+  {% endblock heading %}
+
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-4">
+        <img src="{{album.band.band_image_url}}" class="card-img" alt="Album Band Image">
+        <hr>
+        <div class="row">
+          <div class="col-">
+            <form action="{% url 'album_delete' album.id %}" style="margin-left:10px">
+              <button class="btn btn-danger" type="submit">Delete Album</button>
+            </form>
+          </div>
+          <div class="col-sm">
+            <form action="{% url 'album_edit' album.id %}">
+              <button class="btn btn-secondary" type="submit">Edit Album</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-8">
+        <div class="row">
+          <div class="col">
+            <h3 class="display-7">Song List</h3>
+            <ul>
+              {% for song in album.song_set.all %}
+                <li>{{song.song_title}}
+                  <a href="{{song.music_video_url}}" target= "blank">Video clip
+                  </a> | <small class="text-muted"><a href="{% url 'song_edit' song.id %}" style = "color: inherit">(edit)</a></small>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="col">
+            <h3 class="display-7">Musicians on the Album</h3>
+            {% for artist in album.musician.all %}
+              <strong><a href="{% url 'artist_detail' artist.id %}" style = "color: inherit">{{artist}}</a></strong><br>
+              <ul>
+                {% for skills in artist.instrument.all %}
+                  <li>{{skills}}</li>
+                {% endfor %}
+              </ul>
+            {% endfor %}
+
+            <hr>
+            <h5 class="display-7">Musicians in the Band</h5>
+            {% for artist in album.band.musician_set.all %}
+              <strong><a href="{% url 'artist_detail' artist.id %}" style = "color: inherit">{{artist}}</a></strong><br>
+                {% for skills in artist.instrument.all %}
+                  {% if not forloop.first %}, {% endif %}
+                  {{skills}}
+                {% endfor %}
+                <br>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock body %}

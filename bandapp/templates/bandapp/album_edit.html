@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>{{album.album_name}}</title>
+{% endblock title %}
+
+{% block heading %}
+  <div class="container-fluid">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">{{album.album_name}}</h1>
+        <p class="card-text">
+          <small class="text-muted">
+            <a href="{% url 'band_detail' album.band.id  %}" style = "color: inherit">
+              {{album.band.band_name}}</a> | Released. {{album.release_date}}
+          </small>
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock heading %}
+
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-4">
+        <div class="row">
+          <div class="col-sm">
+            <form action="{% url 'album_delete' album.id %}">
+              <button class="btn btn-danger" type="submit" >Delete Album</button>
+            </form>
+          </div>
+          <div class="col-sm">
+            <form action="{% url 'album_view' album.id %}">
+              <button class="btn btn-dark" type="submit" >Return to Album</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="row">
+          <hr>
+        </div>
+
+        <div class="row" style = "margin-left:10px;">
+          <h3>Edit Album Details</h3>
+          <form action="{% url 'album_edit' album.id %}" method="post">
+            {% csrf_token%}
+            <h6>Album Title</h6>
+            {{album_form.album_name}}<br>
+            <table>
+              <tr>
+                <td><strong>Release Date</strong></td>
+                <td>{{album_form.release_date}}</td>
+              </tr>
+              <tr>
+                <td><strong>The Band</strong></td>
+                <td>{{album_form.band}}</td>
+              </tr>
+            </table>
+            <hr>
+            <small>(CTRL & click to add many)</small>
+            {{album_form.musician}}
+            <button type="submit" class="btn btn-secondary">Save Changes</button>
+          </form>
+        </div>
+
+        <div class="row">
+          <hr>
+        </div>
+
+        <div class="row" style = "margin-left:10px;">
+          <h3>Add Songs to Album</h3>
+          <form action="{% url 'song_add' %}" method="post">
+            {% csrf_token%}
+            <h6>Song Title</h6>
+              {{song_form.song_title}}
+
+            <h6>URL for Music Video</h6>
+            {{song_form.music_video_url}}<br>
+            <button type="submit" class="btn btn-success">Add to album</button>
+            <h6>Change the album if needed</h6>
+            {{song_form.album}}
+            <br><br>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-8">
+        <div class="row">
+
+          <div class="col">
+            <h3 class="display-7">Song List</h3>
+              <ul>
+                {% for song in album.song_set.all %}
+                  <li>{{song.song_title}} </li>
+                {% endfor %}
+              </ul>
+          </div>
+
+          <div class="col">
+            <h3 class="display-7">Musicians on the Album</h3>
+            {% for artist in album.musician.all %}
+              <strong><a href="{% url 'artist_detail' artist.id %}" style = "color: inherit">{{artist}}</a></strong><br>
+              <ul>
+                {% for skills in artist.instrument.all %}
+                  <li>{{skills}}</li>
+                {% endfor %}
+              </ul>
+            {% endfor %}
+            <hr>
+            <h4 class="display-7">Musicians in the Band</h4>
+            {% for artist in album.band.musician_set.all %}
+              <strong><a href="{% url 'artist_detail' artist.id %}" style = "color: inherit">{{artist}}</a></strong><br>
+              {% for skills in artist.instrument.all %}
+                {% if not forloop.first %}, {% endif %}
+                {{skills}}
+              {% endfor %}<br>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock body %}

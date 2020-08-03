@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>Delete {{instrument.instrument_name}}</title>
+{% endblock title %}
+
+
+{% block heading %}
+<div class="container-fluid">
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">Deleting: {{instrument.instrument_name}}!</h1>
+    </div>
+  </div>
+</div>
+{% endblock heading %}
+
+
+{% block body %}
+  <div class="container">
+    <div class="col-8">
+
+        <div class="row">
+          <div class="col-sm">
+            <form action="{% url 'instrument_delete' instrument.id %}" method = "POST">
+              {% csrf_token %}
+              <button class="btn btn-danger" type="submit">Delete Instrument</button>
+            </form>
+          </div>
+          <div class="col-sm">
+            <form action="{% url 'instrument_detail' instrument.id  %}">
+              <button class= "btn btn-success" type="submit">Cancel! Keep It</button>
+            </form>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+        <div class="col">
+          <img src="{{instrument.image_url}}" alt="None Supplied" style ="width:400px;">
+
+
+        </div>
+
+        <div class="col">
+          {% if musos %}
+            <h5 class="display-7">Artists</h5>
+            <hr>
+            {% for muso in musos %}
+              {{muso}}<br>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+{% endblock body %}

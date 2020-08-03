@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>Add Band</title>
+{% endblock title %}
+
+
+{% block heading %}
+  <div class="container-fluid">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Add a Band</h1>
+      </div>
+    </div>
+  </div>
+{% endblock heading %}
+
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="col-8">
+      <div class="row">
+        <div class="col">
+            <img src="https://bit.ly/2xZwci2" class="card-img" alt="Band Image">
+            <p><em>Default Band image</em></p>
+        </div>
+        <div class="col">
+          <form action="{% url 'band_add' %}" method="post">
+            {% csrf_token%}
+            <table>
+              {{ band_form.as_table}}
+            </table>
+            <button class="btn btn-success" type="submit" >Add Band</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

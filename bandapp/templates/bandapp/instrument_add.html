@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>Add Skills</title>
+{% endblock title %}
+
+
+{% block heading %}
+  <div class="container-fluid">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Add new Instrument or Skill</h1>
+      </div>
+    </div>
+  </div>
+{% endblock heading %}
+
+
+{% block body %}
+  <div class="container">
+    <div class="col-8">
+      <div class="row">
+        <div class="col">
+            <img src="https://bit.ly/2WT4gop" class="card-img" alt="Instrument Image">
+            <p><em>Default Instrument image</em></p>
+        </div>
+        <div class="col">
+          <form action="{% url 'instrument_add' %}" method="post">
+            {% csrf_token%}
+            <table>
+              {{ instrument_form.as_table}}
+            </table>
+            <button class="btn btn-success" type="submit" >Save & Add</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

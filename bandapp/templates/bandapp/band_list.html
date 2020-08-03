@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>Band List</title>
+{% endblock title %}
+
+
+{% block heading %}
+  <div class="container-fluid">
+    <h1>The Bands</h1>
+  </div>
+{% endblock heading %}
+
+
+{% block body %}
+  <div class="container">
+    <div class="row row-cols-2 ">
+
+      {% for band in bands %}
+        <a href="{% url 'band_detail' band.id  %}" style = "color: inherit">
+          <div class="card mb-3" style="max-width: 540px; border: none;" >
+            <div class="row no-gutters">
+              <div class="col-md-4 ">
+                <img src="{{band.band_image_url}}" class="card-img" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body mt-3" >
+                  <h5 class="card-title">{{band.band_name}}</h5>
+                  <p class="card-text">
+                    {% for muso in band.member_set.all %}
+                      {% if muso.status == 'Current' %}
+                        {{muso.musician}}<br>
+                      {% endif %}
+                     {% endfor %}
+                   </p>
+                  <p class="card-text"><small class="text-muted">est. {{band.est_since}}</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+
+    </div>
+  </div>
+
+{% endblock body %}

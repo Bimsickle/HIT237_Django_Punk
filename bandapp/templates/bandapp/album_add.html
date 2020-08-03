@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>Add Album</title>
+{% endblock title %}
+
+{% block heading %}
+  <div class="container-fluid">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Add an Album
+        {% if band %}
+          for {{band}}!
+        {% endif %}</h1>
+      </div>
+    </div>
+  </div>
+{% endblock heading %}
+
+{% block body %}
+  <div class="container">
+    <form action="{% url 'album_add' %}" method="post">
+      {% csrf_token%}
+      <table>
+        {{ album_form.as_table }}
+      </table>
+      <button class="btn btn-secondary" type="submit" >Add Album</button>
+    </form>
+  </div>
+{% endblock body %}

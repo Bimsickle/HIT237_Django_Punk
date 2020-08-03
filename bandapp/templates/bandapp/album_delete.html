@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>Delete {{album.album_name}}</title>
+{% endblock title %}
+
+{% block heading %}
+  <div class="container-fluid">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Deleting: {{album.album_name}}!</h1>
+        <p class="card-text"><small class="text-muted">
+          {{album.band.band_name}} | Released. {{album.release_date}}</small></p>
+      </div>
+    </div>
+  </div>
+  {% endblock heading %}
+
+
+{% block body %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-4">
+        <div class="row">
+          <div class="col-">
+            <form action="{% url 'album_delete' album.id %}" style="margin-left:10px" method = "POST">
+              {% csrf_token %}
+              <button class="btn btn-danger" type="submit">Delete Album</button>
+            </form>
+          </div>
+          <div class="col-sm">
+            <form action="{% url 'album_view' album.id %}">
+              <button class="btn btn-success" type="submit">Keep Album</button>
+            </form>
+          </div>
+        </div>
+        <hr>
+        <img src="{{album.band.band_image_url}}" class="card-img" alt="Album Band Image">
+      </div>
+
+      <div class="col-8">
+        <div class="row">
+          <div class="col">
+            <h3 class="display-7">Song List</h3>
+            <ul>
+              {% for song in album.song_set.all %}
+                <li>{{song.song_title}}</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="col">
+            <h3 class="display-7">Musicians on the Album</h3>
+            {% for artist in album.musician.all %}
+              <strong>{{artist}}</strong><br>
+              <ul>
+                {% for skills in artist.instrument.all %}
+                  <li>{{skills}}</li>
+                {% endfor %}
+              </ul>
+            {% endfor %}
+
+            <hr>
+            <h5 class="display-7">Musicians in the Band</h5>
+            {% for artist in album.band.musician_set.all %}
+              <strong>{{artist}}</strong><br>
+                {% for skills in artist.instrument.all %}
+                  {% if not forloop.first %}, {% endif %}
+                  {{skills}}
+                {% endfor %}
+                <br>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock body %}

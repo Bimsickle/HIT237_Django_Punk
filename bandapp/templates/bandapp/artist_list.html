@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>Artists</title>
+{% endblock title %}
+
+
+{% block heading %}
+  <div class="container-fluid">
+    <h1>Punk Contributors & Artists</h1>
+  </div>
+{% endblock heading %}
+
+
+{% block body %}
+  <div class="container">
+    <div class="row row-cols-4 ">
+      {% for muso in musos %}
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title"><a href="{% url 'artist_detail' muso.id %}" style = "color: inherit">{{muso}}</a></h5>
+            <p class="card-text">
+              {% for gigs in muso.band.all %}
+                {% if not forloop.first %}<br>{% endif %}
+                {{gigs}}
+             {% endfor %}
+            </p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock body %}

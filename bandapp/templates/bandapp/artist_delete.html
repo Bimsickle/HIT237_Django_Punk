@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>Delete {{artist.full_name}}</title>
+{% endblock title %}
+
+{% block heading %}
+  <div class="container-fluid">
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Deleting: {{artist.full_name}}!</h1>
+        <p class="lead">
+          {% for gigs in artist.band.all %}
+            {% if not forloop.first %}, {% endif %}
+            {{gigs}}
+          {% endfor %}
+       </p>
+      </div>
+    </div>
+  </div>
+{% endblock heading %}
+
+
+{% block body %}
+  <div class="container">
+    <div class="col-8">
+      <div class="col-8">
+        <div class="row">
+          <div class="col">
+            <form action="{% url 'artist_delete' artist.id %}" method = "POST">
+              {% csrf_token %}
+              <button class="btn btn-danger" type="submit">Delete Artist</button>
+            </form>
+          </div>
+          <div class="col">
+            <form action="{% url 'artist_detail' artist.id %}">
+              <button class="btn btn-success" type="submit">Wait! Keep them!</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+      <div class="row">
+        <div class="col">
+          <h3 class="display-7">Skills</h3>
+          <ul>
+            {% for skills in artist.instrument.all %}
+              <li>{{skills}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="col">
+          <h3 class="display-7">Gigs</h3>
+          <ul>
+            {% for gigs in artist.band.all %}
+              <li>{{gigs}}</li>
+             {% endfor %}
+           </ul>
+        </div>
+      </div>
+
+      {% if artist.album_set.all %}
+        <div class="col">
+          <h3 class="display-7">Recordings</h3>
+          <ul>
+            {% for recording in artist.album_set.all %}
+              <li>{{recording}}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock body %}
